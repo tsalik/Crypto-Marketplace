@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "blog.tsalikis.marketplace.crypto"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "blog.tsalikis.marketplace.crypto"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
