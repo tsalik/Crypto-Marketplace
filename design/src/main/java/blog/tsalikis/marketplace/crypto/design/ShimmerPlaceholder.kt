@@ -4,10 +4,23 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 private const val SHIMMER_LABEL = "shimmer"
 
@@ -40,5 +53,31 @@ fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 100f): Brush 
             start = Offset.Zero,
             end = Offset.Zero
         )
+    }
+}
+
+@Composable
+fun ShimmerPlaceholder() {
+    Column(
+        verticalArrangement = spacedBy(4.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        repeat(8) {
+            Box(
+                modifier = Modifier
+                    .clip(CardDefaults.shape)
+                    .background(
+                        shimmerBrush(
+                            targetValue = 1300f,
+                            showShimmer = true
+                        )
+                    )
+                    .fillMaxWidth()
+                    .heightIn(min = 48.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
     }
 }
