@@ -1,6 +1,5 @@
 package blog.tsalikis.marketplace.marketplace.datasource
 
-import android.util.Log
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
@@ -26,7 +25,8 @@ class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi)
                         symbolFrom = from,
                         symbolTo = to,
                         lastPrice = BigDecimal(tickerValues[7].toString()),
-                        dailyChangeRelative = BigDecimal(tickerValues[6].toString())
+                        dailyChangeRelative = BigDecimal(tickerValues[6].toString()),
+                        iconUrl = "https://static.coincap.io/assets/icons/${from.lowercase()}@2x.png"
                     )
                 }
             }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.math.BigDecimal
@@ -25,7 +26,7 @@ class MarketPlaceViewModelTest {
 
     @Test
     fun `should show loading`() = runTest {
-        whenever(bitfinexApi.getTickers("ALL")).thenReturn(
+        whenever(bitfinexApi.getTickers(any())).thenReturn(
             listOf(
                 listOf(
                     "tBTCUSD",
@@ -52,6 +53,7 @@ class MarketPlaceViewModelTest {
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
                         )
                     )
                 )
@@ -61,7 +63,7 @@ class MarketPlaceViewModelTest {
 
     @Test
     fun `should show error`() = runTest {
-        whenever(bitfinexApi.getTickers("ALL")).thenThrow(RuntimeException())
+        whenever(bitfinexApi.getTickers(any())).thenThrow(RuntimeException())
 
         viewModel.state.test {
             assertThat(awaitItem()).isEqualTo(MarketPlaceState.Error)
