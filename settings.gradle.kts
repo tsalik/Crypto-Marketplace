@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Crypto Marketplace"
 include(":app")
 include(":design")
+include(":marketplace")
