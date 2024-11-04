@@ -15,7 +15,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MarketPlaceViewModel @Inject constructor(private val repository: TickerRepository) : ViewModel() {
 
-    val symbols = "ALL"
+    val symbols = "tBTCUSD,tETHUSD,tCHSB:USD,tLTCUSD,tXRPUSD,tDSHUSD,tRRTUSD,t\n" +
+            "EOSUSD,tSANUSD,tDATUSD,tSNTUSD,tDOGE:USD,tLUNA:USD,tMATIC:USD,tNEXO\n" +
+            ":USD,tOCEAN:USD,tBEST :USD,tAAVE:USD,tPLUUSD,tFILUSD"
 
     private val _state = MutableStateFlow<MarketPlaceState>(MarketPlaceState.Loading)
     val state: StateFlow<MarketPlaceState>

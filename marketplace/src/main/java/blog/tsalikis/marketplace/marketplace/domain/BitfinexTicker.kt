@@ -7,4 +7,5 @@ data class BitfinexTicker(
     val symbolTo: String,
     val lastPrice: BigDecimal,
     val dailyChangeRelative: BigDecimal,
+    val iconUrl: String,
 )

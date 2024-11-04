@@ -97,19 +97,22 @@ class TickerRepositoryTest {
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
-                            dailyChangeRelative = BigDecimal("-0.00755042")
+                            dailyChangeRelative = BigDecimal("-0.00755042"),
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
                         ),
                         BitfinexTicker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
-                            dailyChangeRelative = BigDecimal("-0.00832687")
+                            dailyChangeRelative = BigDecimal("-0.00832687"),
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
                         ),
                         BitfinexTicker(
                             symbolFrom = "XAUT",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2742.2"),
-                            dailyChangeRelative = BigDecimal("0.00029182")
+                            dailyChangeRelative = BigDecimal("0.00029182"),
+                            iconUrl = "https://static.coincap.io/assets/icons/xaut@2x.png",
                         )
                     )
                 )
@@ -135,13 +138,15 @@ class TickerRepositoryTest {
                         symbolFrom = "BTC",
                         symbolTo = "USD",
                         lastPrice = BigDecimal("67956"),
-                        dailyChangeRelative = BigDecimal("-0.00755042")
+                        dailyChangeRelative = BigDecimal("-0.00755042"),
+                        iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
                     ),
                     BitfinexTicker(
                         symbolFrom = "ETH",
                         symbolTo = "USD",
                         lastPrice = BigDecimal("2429.5"),
-                        dailyChangeRelative = BigDecimal("-0.00832687")
+                        dailyChangeRelative = BigDecimal("-0.00832687"),
+                        iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
                     ),
                 )
             )
