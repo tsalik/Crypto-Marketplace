@@ -36,6 +36,12 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.all { unitTest ->
+            unitTest.useJUnitPlatform()  // explicitly use JUnit 5
+        }
+    }
 }
 
 dependencies {
@@ -47,6 +53,12 @@ dependencies {
     implementation(libs.androidx.navigation.common.ktx)
     implementation(libs.hilt.navigation.compose)
     testImplementation(libs.junit)
+    testImplementation(libs.junit5)
+    testRuntimeOnly(libs.junit5)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -59,6 +71,7 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
+    implementation(libs.moshi)
 
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
