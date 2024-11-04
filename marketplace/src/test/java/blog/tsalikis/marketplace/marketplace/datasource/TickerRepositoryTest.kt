@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import java.math.BigDecimal
 
 class TickerRepositoryTest {
 
@@ -56,6 +57,26 @@ class TickerRepositoryTest {
         2737.8
     )
 
+    private val fundingUSD = listOf(
+        "fUSD",
+        0.00043854246575342464,
+        0.00025100000000000003,
+        60,
+        43284954.71282123,
+        0.0001726,
+        2,
+        55693.62705,
+        -0.000129,
+        -0.3395,
+        0.000251,
+        268548691.21375424,
+        0.00049288,
+        0.0000694,
+        null,
+        null,
+        26992173.56154926
+    )
+
     @Test
     fun `should extract the symbol, last price and relative percentage change from the API response`() =
         runTest {
@@ -75,21 +96,55 @@ class TickerRepositoryTest {
                         BitfinexTicker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
-//                            lastPrice = 67956f,
-//                            dailyChangeRelative = 0.00755042f
+                            lastPrice = BigDecimal("67956"),
+                            dailyChangeRelative = BigDecimal("-0.00755042")
                         ),
                         BitfinexTicker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
-//                            lastPrice = 2429.5f,
-//                            dailyChangeRelative = -0.00832687f
+                            lastPrice = BigDecimal("2429.5"),
+                            dailyChangeRelative = BigDecimal("-0.00832687")
                         ),
                         BitfinexTicker(
                             symbolFrom = "XAUT",
                             symbolTo = "USD",
+                            lastPrice = BigDecimal("2742.2"),
+                            dailyChangeRelative = BigDecimal("0.00029182")
                         )
                     )
                 )
             )
         }
+
+    @Test
+    fun `should ignore funding tickers`() = runTest {
+        whenever(bitfinexApi.getTickers("ALL")).thenReturn(
+            listOf(
+                btcUsd,
+                ethUsd,
+                fundingUSD,
+            )
+        )
+
+        val result = tickerRepository.getTickers("ALL")
+
+        assertThat(result).isEqualTo(
+            ContentError.Success(
+                listOf(
+                    BitfinexTicker(
+                        symbolFrom = "BTC",
+                        symbolTo = "USD",
+                        lastPrice = BigDecimal("67956"),
+                        dailyChangeRelative = BigDecimal("-0.00755042")
+                    ),
+                    BitfinexTicker(
+                        symbolFrom = "ETH",
+                        symbolTo = "USD",
+                        lastPrice = BigDecimal("2429.5"),
+                        dailyChangeRelative = BigDecimal("-0.00832687")
+                    ),
+                )
+            )
+        )
+    }
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(CoroutineTestExtension::class, InstantExecutorExtension::class)
@@ -46,7 +47,12 @@ class MarketPlaceViewModelTest {
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(symbolFrom = "BTC", symbolTo = "USD")
+                        BitfinexTicker(
+                            symbolFrom = "BTC",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("67956"),
+                            dailyChangeRelative = BigDecimal("-0.00755042"),
+                        )
                     )
                 )
             )

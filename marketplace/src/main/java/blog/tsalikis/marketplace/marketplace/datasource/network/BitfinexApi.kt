@@ -8,5 +8,5 @@ interface BitfinexApi {
     @GET("tickers")
     suspend fun getTickers(
         @Query("symbols") symbols: String // Comma-separated list, e.g., "tBTCUSD,tETHUSD"
-    ): List<List<Any>>
+    ): List<List<Any?>>
 }
