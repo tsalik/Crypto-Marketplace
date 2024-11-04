@@ -1,18 +1,21 @@
 package blog.tsalikis.marketplace.marketplace.ui
 
 import app.cash.turbine.test
-import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
+import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.util.CoroutineTestExtension
 import blog.tsalikis.marketplace.util.InstantExecutorExtension
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.math.BigDecimal
 
@@ -43,6 +46,9 @@ class MarketPlaceViewModelTest {
                 )
             )
         )
+
+        viewModel.startPolling()
+
         viewModel.state.test {
 
             assertThat(awaitItem()).isEqualTo(
@@ -59,14 +65,54 @@ class MarketPlaceViewModelTest {
                 )
             )
         }
+
+        viewModel.stopPolling()
     }
 
     @Test
     fun `should show error`() = runTest {
         whenever(bitfinexApi.getTickers(any())).thenThrow(RuntimeException())
 
+        viewModel.startPolling()
+
         viewModel.state.test {
             assertThat(awaitItem()).isEqualTo(MarketPlaceState.Error)
+
+            viewModel.stopPolling()
+        }
+    }
+
+    @Test
+    fun `should poll every 5 seconds`() = runTest {
+        whenever(bitfinexApi.getTickers(any())).thenReturn(
+            listOf(
+                listOf(
+                    "tBTCUSD",
+                    67956,
+                    5.45609834,
+                    67957,
+                    6.2569596,
+                    -517,
+                    -0.00755042,
+                    67956,
+                    434.80983796,
+                    69505,
+                    67328,
+                )
+            )
+        )
+
+        viewModel.startPolling()
+
+        viewModel.state.test {
+
+            awaitItem()
+
+            advanceTimeBy(15000)
+
+            verify(bitfinexApi, times(3)).getTickers(any())
+
+            viewModel.stopPolling()
         }
     }
 }
