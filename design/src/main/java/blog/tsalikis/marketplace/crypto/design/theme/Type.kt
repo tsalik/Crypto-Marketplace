@@ -1,4 +1,4 @@
-package blog.tsalikis.marketplace.crypto.ui.theme
+package blog.tsalikis.marketplace.crypto.design.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
