@@ -6,6 +6,7 @@ import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -25,7 +26,6 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
 
     init {
         viewModelScope.launch {
-            _state.update { MarketPlaceState.Loading }
             when (val tickers = repository.getTickers(symbols)) {
                 is ContentError.Error -> {
                     _state.update { MarketPlaceState.Error }
