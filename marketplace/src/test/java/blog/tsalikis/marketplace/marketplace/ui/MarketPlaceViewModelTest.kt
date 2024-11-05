@@ -7,6 +7,7 @@ import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.util.CoroutineTestExtension
 import blog.tsalikis.marketplace.util.InstantExecutorExtension
 import com.google.common.truth.Truth.assertThat
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -43,6 +44,19 @@ class MarketPlaceViewModelTest {
                     434.80983796,
                     69505,
                     67328,
+                ),
+                listOf(
+                    "tETHUSD",
+                    2430,
+                    108.03729621,
+                    2430.5,
+                    214.21013261,
+                    -20.4,
+                    -0.00832687,
+                    2429.5,
+                    3103.73590962,
+                    2491.4,
+                    2408.4
                 )
             )
         )
@@ -60,8 +74,16 @@ class MarketPlaceViewModelTest {
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                        ),
+                        BitfinexTicker(
+                            symbolFrom = "ETH",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("2429.5"),
+                            dailyChangeRelative = BigDecimal("-0.00832687"),
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png"
                         )
-                    )
+                    ).toPersistentList(),
+                    query = "",
                 )
             )
         }
@@ -111,6 +133,155 @@ class MarketPlaceViewModelTest {
             advanceTimeBy(15000)
 
             verify(bitfinexApi, times(3)).getTickers(any())
+
+            viewModel.stopPolling()
+        }
+    }
+
+    @Test
+    fun `should filter results based on the search text if it is not empty or blank`() = runTest {
+        whenever(bitfinexApi.getTickers(any())).thenReturn(
+            listOf(
+                listOf(
+                    "tBTCUSD",
+                    67956,
+                    5.45609834,
+                    67957,
+                    6.2569596,
+                    -517,
+                    -0.00755042,
+                    67956,
+                    434.80983796,
+                    69505,
+                    67328,
+                ),
+                listOf(
+                    "tETHUSD",
+                    2430,
+                    108.03729621,
+                    2430.5,
+                    214.21013261,
+                    -20.4,
+                    -0.00832687,
+                    2429.5,
+                    3103.73590962,
+                    2491.4,
+                    2408.4
+                )
+            )
+        )
+
+        viewModel.startPolling()
+
+        viewModel.state.test {
+
+            assertThat(awaitItem()).isEqualTo(
+                MarketPlaceState.Success(
+                    listOf(
+                        BitfinexTicker(
+                            symbolFrom = "BTC",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("67956"),
+                            dailyChangeRelative = BigDecimal("-0.00755042"),
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                        ),
+                        BitfinexTicker(
+                            symbolFrom = "ETH",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("2429.5"),
+                            dailyChangeRelative = BigDecimal("-0.00832687"),
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png"
+                        )
+                    ).toPersistentList(),
+                    query = ""
+                )
+            )
+
+            viewModel.filterFromSearched("BT")
+
+            assertThat(awaitItem()).isEqualTo(
+                MarketPlaceState.Success(
+                    listOf(
+                        BitfinexTicker(
+                            symbolFrom = "BTC",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("67956"),
+                            dailyChangeRelative = BigDecimal("-0.00755042"),
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                        ),
+                    ).toPersistentList(),
+                    query = "BT"
+                )
+            )
+
+            viewModel.stopPolling()
+        }
+    }
+
+    @Test
+    fun `should show all the results after clearing the search`() = runTest {
+        whenever(bitfinexApi.getTickers(any())).thenReturn(
+            listOf(
+                listOf(
+                    "tBTCUSD",
+                    67956,
+                    5.45609834,
+                    67957,
+                    6.2569596,
+                    -517,
+                    -0.00755042,
+                    67956,
+                    434.80983796,
+                    69505,
+                    67328,
+                ),
+                listOf(
+                    "tETHUSD",
+                    2430,
+                    108.03729621,
+                    2430.5,
+                    214.21013261,
+                    -20.4,
+                    -0.00832687,
+                    2429.5,
+                    3103.73590962,
+                    2491.4,
+                    2408.4
+                )
+            )
+        )
+
+        viewModel.startPolling()
+
+        viewModel.state.test {
+
+            awaitItem()
+            viewModel.filterFromSearched("BT")
+            awaitItem()
+
+            viewModel.filterFromSearched("")
+
+            assertThat(awaitItem()).isEqualTo(
+                MarketPlaceState.Success(
+                    listOf(
+                        BitfinexTicker(
+                            symbolFrom = "BTC",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("67956"),
+                            dailyChangeRelative = BigDecimal("-0.00755042"),
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                        ),
+                        BitfinexTicker(
+                            symbolFrom = "ETH",
+                            symbolTo = "USD",
+                            lastPrice = BigDecimal("2429.5"),
+                            dailyChangeRelative = BigDecimal("-0.00832687"),
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png"
+                        )
+                    ).toPersistentList(),
+                    query = "",
+                )
+            )
 
             viewModel.stopPolling()
         }

@@ -30,7 +30,7 @@ fun TickerItem(item: BitfinexTicker) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.padding(4.dp),
+            modifier = Modifier.padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             SubcomposeAsyncImage(
