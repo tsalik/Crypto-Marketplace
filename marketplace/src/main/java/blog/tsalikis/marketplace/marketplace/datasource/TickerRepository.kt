@@ -32,12 +32,15 @@ class TickerRepository @Inject constructor(
                     null
                 } else {
                     val (from, to) = parseSymbols(symbol)
+                    val lastPrice = BigDecimal(tickerValues[7].toString())
+                    val dailyChangeRelative = BigDecimal(tickerValues[6].toString())
                     BitfinexTicker(
                         symbolFrom = from,
                         symbolTo = to,
-                        lastPrice = BigDecimal(tickerValues[7].toString()),
-                        dailyChangeRelative = BigDecimal(tickerValues[6].toString()),
-                        iconUrl = "https://static.coincap.io/assets/icons/${from.lowercase()}@2x.png"
+                        lastPrice = lastPrice,
+                        dailyChangeRelative = dailyChangeRelative,
+                        iconUrl = "https://static.coincap.io/assets/icons/${from.lowercase()}@2x.png",
+                        formattedValue = tickerFormatter.formatValue(to, lastPrice)
                     )
                 }
             }

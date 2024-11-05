@@ -73,10 +73,7 @@ fun TickerItem(item: BitfinexTicker) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.End,
             ) {
-                Row {
-                    Text(item.symbolTo)
-                    Text(item.lastPrice.toString())
-                }
+                Text(item.formattedValue)
                 Text(item.dailyChangeRelative.toString())
             }
         }

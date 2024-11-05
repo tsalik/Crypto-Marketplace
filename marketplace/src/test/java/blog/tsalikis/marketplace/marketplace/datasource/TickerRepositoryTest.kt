@@ -102,6 +102,7 @@ class TickerRepositoryTest {
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                            formattedValue = "$67,956.00"
                         ),
                         BitfinexTicker(
                             symbolFrom = "ETH",
@@ -109,6 +110,7 @@ class TickerRepositoryTest {
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
                             iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                            formattedValue = "$2,429.50"
                         ),
                         BitfinexTicker(
                             symbolFrom = "XAUT",
@@ -116,6 +118,7 @@ class TickerRepositoryTest {
                             lastPrice = BigDecimal("2742.2"),
                             dailyChangeRelative = BigDecimal("0.00029182"),
                             iconUrl = "https://static.coincap.io/assets/icons/xaut@2x.png",
+                            formattedValue = "$2,742.20",
                         )
                     )
                 )
@@ -143,6 +146,7 @@ class TickerRepositoryTest {
                         lastPrice = BigDecimal("67956"),
                         dailyChangeRelative = BigDecimal("-0.00755042"),
                         iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                        formattedValue = "$67,956.00",
                     ),
                     BitfinexTicker(
                         symbolFrom = "ETH",
@@ -150,6 +154,7 @@ class TickerRepositoryTest {
                         lastPrice = BigDecimal("2429.5"),
                         dailyChangeRelative = BigDecimal("-0.00832687"),
                         iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                        formattedValue = "$2,429.50",
                     ),
                 )
             )
