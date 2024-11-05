@@ -38,6 +38,7 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
             while (isActive) {
                 when (val tickers = repository.getTickers(symbols)) {
                     is ContentError.Error -> {
+                        stopPolling()
                         _state.update { MarketPlaceState.Error(tickers.errorCase) }
                     }
 
@@ -91,6 +92,15 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
                     }
                 }
             }
+        }
+    }
+
+    fun onRetry() {
+        viewModelScope.launch {
+            _state.update {
+                MarketPlaceState.Loading
+            }
+            startPolling()
         }
     }
 }

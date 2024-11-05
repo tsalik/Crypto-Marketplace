@@ -53,7 +53,8 @@ fun NavGraphBuilder.marketplace() {
         )
         MarketPlaceScreen(
             state = state,
-            onTextChanged = { viewModel.filterFromSearched(it) }
+            onTextChanged = { viewModel.filterFromSearched(it) },
+            onRetry = { viewModel.onRetry() }
         )
     }
 }
@@ -85,10 +86,14 @@ fun DisposableLifecycleObserver(onResume: () -> Unit, onPause: () -> Unit) {
 }
 
 @Composable
-fun MarketPlaceScreen(state: MarketPlaceState, onTextChanged: (String) -> Unit) {
+fun MarketPlaceScreen(
+    state: MarketPlaceState,
+    onTextChanged: (String) -> Unit,
+    onRetry: () -> Unit,
+) {
     when (state) {
         is MarketPlaceState.Error -> Scaffold { paddingValues ->
-            val title  = when (state.errorCase) {
+            val title = when (state.errorCase) {
                 ErrorCase.Timeout -> TODO()
                 ErrorCase.Connectivity -> R.string.no_connection_title
                 ErrorCase.Generic -> TODO()
@@ -103,7 +108,7 @@ fun MarketPlaceScreen(state: MarketPlaceState, onTextChanged: (String) -> Unit) 
             ErrorScreen(
                 title = stringResource(title),
                 subtitle = stringResource(subtitle),
-                onRetry = {  },
+                onRetry = onRetry,
                 modifier = Modifier.padding(paddingValues)
             )
         }
