@@ -94,16 +94,16 @@ fun MarketPlaceScreen(
     when (state) {
         is MarketPlaceState.Error -> Scaffold { paddingValues ->
             val title = when (state.errorCase) {
-                ErrorCase.Timeout -> TODO()
+                ErrorCase.Timeout -> R.string.timeout_title
                 ErrorCase.Connectivity -> R.string.no_connection_title
-                ErrorCase.Generic -> TODO()
-                ErrorCase.Limit -> TODO()
+                ErrorCase.Generic -> R.string.generic_error_title
+                ErrorCase.Limit -> R.string.limit_error_title
             }
             val subtitle = when (state.errorCase) {
-                ErrorCase.Timeout -> TODO()
+                ErrorCase.Timeout -> R.string.timeout_subtitle
                 ErrorCase.Connectivity -> R.string.no_connection_subtitle
-                ErrorCase.Generic -> TODO()
-                ErrorCase.Limit -> TODO()
+                ErrorCase.Generic -> R.string.generic_error_subtitle
+                ErrorCase.Limit -> R.string.limit_error_subtitle
             }
             ErrorScreen(
                 title = stringResource(title),
