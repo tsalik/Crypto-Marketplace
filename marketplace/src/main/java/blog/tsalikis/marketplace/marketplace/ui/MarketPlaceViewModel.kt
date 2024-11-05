@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
+import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -37,7 +38,7 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
             while (isActive) {
                 when (val tickers = repository.getTickers(symbols)) {
                     is ContentError.Error -> {
-                        _state.update { MarketPlaceState.Error }
+                        _state.update { MarketPlaceState.Error(tickers.errorCase) }
                     }
 
                     is ContentError.Success -> {
@@ -97,5 +98,5 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
 sealed class MarketPlaceState {
     data object Loading : MarketPlaceState()
     data class Success(val values: PersistentList<BitfinexTicker>, val query: String) : MarketPlaceState()
-    data object Error : MarketPlaceState()
+    data class Error(val errorCase: ErrorCase) : MarketPlaceState()
 }

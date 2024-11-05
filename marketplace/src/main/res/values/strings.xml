@@ -2,4 +2,7 @@
 <resources>
     <string name="search_ticker_placeholder">Search</string>
     <string name="clear_search">Clear search</string>
+    <string name="no_connection_title">No internet connection!</string>
+    <string name="no_connection_subtitle">Please check your WIFI or mobile data</string>
+    <string name="retry">Try again</string>
 </resources>

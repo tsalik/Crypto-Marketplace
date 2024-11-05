@@ -4,11 +4,18 @@ import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
+import okhttp3.ResponseBody.Companion.toResponseBody
+import retrofit2.HttpException
+import retrofit2.Response
 import java.math.BigDecimal
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 private const val PREFIX_FUNDING = "f"
 private const val PREFIX_TICKER = "t"
+
+private const val ERROR_CODE_RATE_LIMIT = 429
 
 class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi) {
 
@@ -32,7 +39,7 @@ class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi)
             }
             ContentError.Success(parsedTickers)
         } catch (networkCallException: Exception) {
-            parseNetworkException(networkCallException)
+            parseHttpFailure(networkCallException)
         }
     }
 
@@ -53,8 +60,30 @@ class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi)
         }
     }
 
-    private fun parseNetworkException(exception: Exception): ContentError.Error<List<BitfinexTicker>> {
-        return ContentError.Error(ErrorCase.Generic)
+    private fun parseHttpFailure(exception: Exception): ContentError<List<BitfinexTicker>> {
+        return when (exception) {
+            is UnknownHostException -> {
+                ContentError.Error(ErrorCase.Connectivity)
+            }
+
+            is SocketTimeoutException -> {
+                ContentError.Error(ErrorCase.Timeout)
+            }
+
+            is HttpException -> {
+                val errorCode = exception.response()?.code()
+                val errorCase = if (errorCode == ERROR_CODE_RATE_LIMIT) {
+                    ErrorCase.Limit
+                } else {
+                    ErrorCase.Generic
+                }
+                return ContentError.Error(errorCase)
+            }
+
+            else -> {
+                ContentError.Error(ErrorCase.Generic)
+            }
+        }
     }
 
 }
