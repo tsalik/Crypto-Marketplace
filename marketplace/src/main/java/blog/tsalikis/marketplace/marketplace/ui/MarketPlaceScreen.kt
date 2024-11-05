@@ -1,7 +1,9 @@
 package blog.tsalikis.marketplace.marketplace.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +13,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,12 +24,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -36,6 +39,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import blog.tsalikis.marketplace.crypto.design.ShimmerPlaceholder
 import blog.tsalikis.marketplace.marketplace.R
+import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
 
 const val marketplaceDestination = "search/tokens"
 
@@ -49,7 +53,8 @@ fun NavGraphBuilder.marketplace() {
         )
         MarketPlaceScreen(
             state = state,
-            onTextChanged = { viewModel.filterFromSearched(it) }
+            onTextChanged = { viewModel.filterFromSearched(it) },
+            onRetry = { viewModel.onRetry() }
         )
     }
 }
@@ -81,9 +86,33 @@ fun DisposableLifecycleObserver(onResume: () -> Unit, onPause: () -> Unit) {
 }
 
 @Composable
-fun MarketPlaceScreen(state: MarketPlaceState, onTextChanged: (String) -> Unit) {
+fun MarketPlaceScreen(
+    state: MarketPlaceState,
+    onTextChanged: (String) -> Unit,
+    onRetry: () -> Unit,
+) {
     when (state) {
-        MarketPlaceState.Error -> Text("Error")
+        is MarketPlaceState.Error -> Scaffold { paddingValues ->
+            val title = when (state.errorCase) {
+                ErrorCase.Timeout -> R.string.timeout_title
+                ErrorCase.Connectivity -> R.string.no_connection_title
+                ErrorCase.Generic -> R.string.generic_error_title
+                ErrorCase.Limit -> R.string.limit_error_title
+            }
+            val subtitle = when (state.errorCase) {
+                ErrorCase.Timeout -> R.string.timeout_subtitle
+                ErrorCase.Connectivity -> R.string.no_connection_subtitle
+                ErrorCase.Generic -> R.string.generic_error_subtitle
+                ErrorCase.Limit -> R.string.limit_error_subtitle
+            }
+            ErrorScreen(
+                title = stringResource(title),
+                subtitle = stringResource(subtitle),
+                onRetry = onRetry,
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
+
         MarketPlaceState.Loading -> Scaffold { padding ->
             Column(modifier = Modifier.padding(padding)) {
                 ShimmerPlaceholder()
@@ -146,3 +175,40 @@ private fun MarketplaceContent(state: MarketPlaceState.Success, onTextChanged: (
 }
 
 
+@Composable
+fun ErrorScreen(
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    onRetry: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+            )
+            Button(
+                onClick = onRetry,
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(stringResource(R.string.retry))
+            }
+        }
+    }
+}

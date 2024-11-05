@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
 import blog.tsalikis.marketplace.util.CoroutineTestExtension
 import blog.tsalikis.marketplace.util.InstantExecutorExtension
 import com.google.common.truth.Truth.assertThat
@@ -98,7 +99,7 @@ class MarketPlaceViewModelTest {
         viewModel.startPolling()
 
         viewModel.state.test {
-            assertThat(awaitItem()).isEqualTo(MarketPlaceState.Error)
+            assertThat(awaitItem()).isEqualTo(MarketPlaceState.Error(ErrorCase.Generic))
 
             viewModel.stopPolling()
         }

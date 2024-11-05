@@ -2,4 +2,13 @@
 <resources>
     <string name="search_ticker_placeholder">Search</string>
     <string name="clear_search">Clear search</string>
+    <string name="no_connection_title">No internet connection!</string>
+    <string name="no_connection_subtitle">Please check your WIFI or mobile data</string>
+    <string name="timeout_title">Connection Issue</string>
+    <string name="timeout_subtitle">Loading is taking longer than expected. Please check your connection and try again.</string>
+    <string name="generic_error_title">Something Went Wrong</string>
+    <string name="generic_error_subtitle">An unexpected error occurred. Please try again in a moment.</string>
+    <string name="limit_error_title">Hold On!</string>
+    <string name="limit_error_subtitle">You’ve made a lot of requests recently. Please wait a moment and try again.</string>
+    <string name="retry">Try again</string>
 </resources>
