@@ -4,6 +4,7 @@ import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
+import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
@@ -17,7 +18,10 @@ private const val PREFIX_TICKER = "t"
 
 private const val ERROR_CODE_RATE_LIMIT = 429
 
-class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi) {
+class TickerRepository @Inject constructor(
+    private val bitfinexApi: BitfinexApi,
+    private val tickerFormatter: TickerFormatter
+) {
 
     suspend fun getTickers(symbols: String): ContentError<List<BitfinexTicker>> {
         return try {

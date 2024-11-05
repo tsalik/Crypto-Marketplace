@@ -5,6 +5,7 @@ import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
+import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import blog.tsalikis.marketplace.util.CoroutineTestExtension
 import blog.tsalikis.marketplace.util.InstantExecutorExtension
 import com.google.common.truth.Truth.assertThat
@@ -26,7 +27,7 @@ import java.math.BigDecimal
 class MarketPlaceViewModelTest {
 
     private val bitfinexApi = mock<BitfinexApi>()
-    private val tickerRepository = TickerRepository(bitfinexApi)
+    private val tickerRepository = TickerRepository(bitfinexApi, TickerFormatter())
     private val viewModel by lazy { MarketPlaceViewModel(tickerRepository) }
 
     @Test

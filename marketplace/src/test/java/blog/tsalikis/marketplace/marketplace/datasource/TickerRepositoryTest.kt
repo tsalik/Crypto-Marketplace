@@ -4,6 +4,7 @@ import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
+import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ import java.net.UnknownHostException
 class TickerRepositoryTest {
 
     private val bitfinexApi = mock<BitfinexApi>()
-    private val tickerRepository = TickerRepository(bitfinexApi)
+    private val tickerRepository = TickerRepository(bitfinexApi, TickerFormatter())
 
     private val btcUsd = listOf(
         "tBTCUSD",
