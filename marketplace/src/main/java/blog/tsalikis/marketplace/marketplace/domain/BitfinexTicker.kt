@@ -9,4 +9,5 @@ data class BitfinexTicker(
     val dailyChangeRelative: BigDecimal,
     val iconUrl: String,
     val formattedValue: String,
+    val formattedDailyChangeRelative: String,
 )

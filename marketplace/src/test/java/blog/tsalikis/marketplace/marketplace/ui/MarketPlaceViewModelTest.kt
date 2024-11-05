@@ -78,7 +78,8 @@ class MarketPlaceViewModelTest {
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
-                            formattedValue = "$67,956.00"
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
                         BitfinexTicker(
                             symbolFrom = "ETH",
@@ -86,7 +87,8 @@ class MarketPlaceViewModelTest {
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
                             iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
-                            formattedValue = "$2,429.50"
+                            formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         )
                     ).toPersistentList(),
                     query = "",
@@ -193,6 +195,7 @@ class MarketPlaceViewModelTest {
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
                             formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
                         BitfinexTicker(
                             symbolFrom = "ETH",
@@ -201,6 +204,7 @@ class MarketPlaceViewModelTest {
                             dailyChangeRelative = BigDecimal("-0.00832687"),
                             iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
                             formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         )
                     ).toPersistentList(),
                     query = ""
@@ -219,6 +223,7 @@ class MarketPlaceViewModelTest {
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
                             formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
                     ).toPersistentList(),
                     query = "BT"
@@ -281,7 +286,8 @@ class MarketPlaceViewModelTest {
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
-                            formattedValue = "$67,956.00"
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
                         BitfinexTicker(
                             symbolFrom = "ETH",
@@ -289,7 +295,8 @@ class MarketPlaceViewModelTest {
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
                             iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
-                            formattedValue = "$2,429.50"
+                            formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         )
                     ).toPersistentList(),
                     query = "",

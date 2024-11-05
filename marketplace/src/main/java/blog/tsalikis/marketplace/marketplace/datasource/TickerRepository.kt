@@ -40,7 +40,8 @@ class TickerRepository @Inject constructor(
                         lastPrice = lastPrice,
                         dailyChangeRelative = dailyChangeRelative,
                         iconUrl = "https://static.coincap.io/assets/icons/${from.lowercase()}@2x.png",
-                        formattedValue = tickerFormatter.formatValue(to, lastPrice)
+                        formattedValue = tickerFormatter.formatValue(to, lastPrice),
+                        formattedDailyChangeRelative = tickerFormatter.formatAsPercentage(dailyChangeRelative),
                     )
                 }
             }
