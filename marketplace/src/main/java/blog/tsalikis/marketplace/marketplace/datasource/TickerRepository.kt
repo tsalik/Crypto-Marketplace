@@ -1,13 +1,11 @@
 package blog.tsalikis.marketplace.marketplace.datasource
 
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
 import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
-import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
-import retrofit2.Response
 import java.math.BigDecimal
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -23,7 +21,7 @@ class TickerRepository @Inject constructor(
     private val tickerFormatter: TickerFormatter
 ) {
 
-    suspend fun getTickers(symbols: String): ContentError<List<BitfinexTicker>> {
+    suspend fun getTickers(symbols: String): ContentError<List<Ticker>> {
         return try {
             val tickers = bitfinexApi.getTickers(symbols)
             val parsedTickers = tickers.mapNotNull { tickerValues ->
@@ -34,7 +32,7 @@ class TickerRepository @Inject constructor(
                     val (from, to) = parseSymbols(symbol)
                     val lastPrice = BigDecimal(tickerValues[7].toString())
                     val dailyChangeRelative = BigDecimal(tickerValues[6].toString())
-                    BitfinexTicker(
+                    Ticker(
                         symbolFrom = from,
                         symbolTo = to,
                         lastPrice = lastPrice,
@@ -68,7 +66,7 @@ class TickerRepository @Inject constructor(
         }
     }
 
-    private fun parseHttpFailure(exception: Exception): ContentError<List<BitfinexTicker>> {
+    private fun parseHttpFailure(exception: Exception): ContentError<List<Ticker>> {
         return when (exception) {
             is UnknownHostException -> {
                 ContentError.Error(ErrorCase.Connectivity)

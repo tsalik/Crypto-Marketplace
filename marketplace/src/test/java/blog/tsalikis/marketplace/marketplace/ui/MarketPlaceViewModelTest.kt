@@ -3,7 +3,7 @@ package blog.tsalikis.marketplace.marketplace.ui
 import app.cash.turbine.test
 import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
 import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import blog.tsalikis.marketplace.util.CoroutineTestExtension
@@ -72,7 +72,7 @@ class MarketPlaceViewModelTest {
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
@@ -81,7 +81,7 @@ class MarketPlaceViewModelTest {
                             formattedValue = "$67,956.00",
                             formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
@@ -188,7 +188,7 @@ class MarketPlaceViewModelTest {
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
@@ -197,7 +197,7 @@ class MarketPlaceViewModelTest {
                             formattedValue = "$67,956.00",
                             formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
@@ -216,7 +216,7 @@ class MarketPlaceViewModelTest {
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
@@ -280,7 +280,7 @@ class MarketPlaceViewModelTest {
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
@@ -289,7 +289,7 @@ class MarketPlaceViewModelTest {
                             formattedValue = "$67,956.00",
                             formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),

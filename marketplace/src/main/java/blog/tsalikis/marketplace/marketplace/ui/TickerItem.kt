@@ -23,11 +23,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import blog.tsalikis.marketplace.crypto.design.shimmerBrush
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
 import coil3.compose.SubcomposeAsyncImage
 
 @Composable
-fun TickerItem(item: BitfinexTicker) {
+fun TickerItem(item: Ticker) {
     OutlinedCard(
         modifier = Modifier.fillMaxWidth()
     ) {
