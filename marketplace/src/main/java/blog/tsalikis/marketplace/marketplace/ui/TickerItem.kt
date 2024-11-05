@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,14 +69,22 @@ fun TickerItem(item: BitfinexTicker) {
                 item.symbolFrom,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 4.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
             )
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.End,
             ) {
-                Text(item.formattedValue)
-                Text(item.formattedDailyChangeRelative)
+                Text(
+                    item.formattedValue, style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    item.formattedDailyChangeRelative,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
