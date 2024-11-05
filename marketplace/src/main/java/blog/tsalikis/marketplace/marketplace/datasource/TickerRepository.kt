@@ -1,12 +1,11 @@
 package blog.tsalikis.marketplace.marketplace.datasource
 
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
-import okhttp3.ResponseBody.Companion.toResponseBody
+import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import retrofit2.HttpException
-import retrofit2.Response
 import java.math.BigDecimal
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -17,9 +16,12 @@ private const val PREFIX_TICKER = "t"
 
 private const val ERROR_CODE_RATE_LIMIT = 429
 
-class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi) {
+class TickerRepository @Inject constructor(
+    private val bitfinexApi: BitfinexApi,
+    private val tickerFormatter: TickerFormatter
+) {
 
-    suspend fun getTickers(symbols: String): ContentError<List<BitfinexTicker>> {
+    suspend fun getTickers(symbols: String): ContentError<List<Ticker>> {
         return try {
             val tickers = bitfinexApi.getTickers(symbols)
             val parsedTickers = tickers.mapNotNull { tickerValues ->
@@ -28,12 +30,16 @@ class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi)
                     null
                 } else {
                     val (from, to) = parseSymbols(symbol)
-                    BitfinexTicker(
+                    val lastPrice = BigDecimal(tickerValues[7].toString())
+                    val dailyChangeRelative = BigDecimal(tickerValues[6].toString())
+                    Ticker(
                         symbolFrom = from,
                         symbolTo = to,
-                        lastPrice = BigDecimal(tickerValues[7].toString()),
-                        dailyChangeRelative = BigDecimal(tickerValues[6].toString()),
-                        iconUrl = "https://static.coincap.io/assets/icons/${from.lowercase()}@2x.png"
+                        lastPrice = lastPrice,
+                        dailyChangeRelative = dailyChangeRelative,
+                        iconUrl = "https://static.coincap.io/assets/icons/${from.lowercase()}@2x.png",
+                        formattedValue = tickerFormatter.formatValue(to, lastPrice),
+                        formattedDailyChangeRelative = tickerFormatter.formatAsPercentage(dailyChangeRelative),
                     )
                 }
             }
@@ -60,7 +66,7 @@ class TickerRepository @Inject constructor(private val bitfinexApi: BitfinexApi)
         }
     }
 
-    private fun parseHttpFailure(exception: Exception): ContentError<List<BitfinexTicker>> {
+    private fun parseHttpFailure(exception: Exception): ContentError<List<Ticker>> {
         return when (exception) {
             is UnknownHostException -> {
                 ContentError.Error(ErrorCase.Connectivity)

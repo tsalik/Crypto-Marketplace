@@ -3,7 +3,7 @@ package blog.tsalikis.marketplace.marketplace.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +31,7 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
 
     private var pollingJob: Job? = null
     private var query = ""
-    private var cachedTickerResults: List<BitfinexTicker> = emptyList()
+    private var cachedTickerResults: List<Ticker> = emptyList()
 
     fun startPolling() {
         pollingJob = viewModelScope.launch {
@@ -68,7 +68,7 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
 
     private fun filterResults(
         query: String,
-        tickers: List<BitfinexTicker>
+        tickers: List<Ticker>
     ): MarketPlaceState.Success {
         val filtered = if (query.isNotBlank() || query.isNotEmpty()) {
             tickers.filter { it.symbolFrom.contains(query, ignoreCase = true) }
@@ -107,6 +107,6 @@ class MarketPlaceViewModel @Inject constructor(private val repository: TickerRep
 
 sealed class MarketPlaceState {
     data object Loading : MarketPlaceState()
-    data class Success(val values: PersistentList<BitfinexTicker>, val query: String) : MarketPlaceState()
+    data class Success(val values: PersistentList<Ticker>, val query: String) : MarketPlaceState()
     data class Error(val errorCase: ErrorCase) : MarketPlaceState()
 }

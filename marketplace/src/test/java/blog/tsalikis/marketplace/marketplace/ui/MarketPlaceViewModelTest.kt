@@ -3,8 +3,9 @@ package blog.tsalikis.marketplace.marketplace.ui
 import app.cash.turbine.test
 import blog.tsalikis.marketplace.marketplace.datasource.TickerRepository
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
 import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
+import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import blog.tsalikis.marketplace.util.CoroutineTestExtension
 import blog.tsalikis.marketplace.util.InstantExecutorExtension
 import com.google.common.truth.Truth.assertThat
@@ -26,7 +27,7 @@ import java.math.BigDecimal
 class MarketPlaceViewModelTest {
 
     private val bitfinexApi = mock<BitfinexApi>()
-    private val tickerRepository = TickerRepository(bitfinexApi)
+    private val tickerRepository = TickerRepository(bitfinexApi, TickerFormatter())
     private val viewModel by lazy { MarketPlaceViewModel(tickerRepository) }
 
     @Test
@@ -66,22 +67,28 @@ class MarketPlaceViewModelTest {
 
         viewModel.state.test {
 
+            viewModel.stopPolling()
+
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
-                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
-                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                            formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         )
                     ).toPersistentList(),
                     query = "",
@@ -89,7 +96,7 @@ class MarketPlaceViewModelTest {
             )
         }
 
-        viewModel.stopPolling()
+
     }
 
     @Test
@@ -176,22 +183,28 @@ class MarketPlaceViewModelTest {
 
         viewModel.state.test {
 
+            viewModel.stopPolling()
+
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
-                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
-                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                            formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         )
                     ).toPersistentList(),
                     query = ""
@@ -203,19 +216,19 @@ class MarketPlaceViewModelTest {
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
-                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
                     ).toPersistentList(),
                     query = "BT"
                 )
             )
-
-            viewModel.stopPolling()
         }
     }
 
@@ -262,29 +275,33 @@ class MarketPlaceViewModelTest {
 
             viewModel.filterFromSearched("")
 
+            viewModel.stopPolling()
+
             assertThat(awaitItem()).isEqualTo(
                 MarketPlaceState.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
-                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
-                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png"
+                            iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                            formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         )
                     ).toPersistentList(),
                     query = "",
                 )
             )
-
-            viewModel.stopPolling()
         }
     }
 }

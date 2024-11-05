@@ -2,20 +2,19 @@ package blog.tsalikis.marketplace.marketplace.datasource
 
 import blog.tsalikis.marketplace.marketplace.datasource.network.BitfinexApi
 import blog.tsalikis.marketplace.marketplace.domain.ContentError
-import blog.tsalikis.marketplace.marketplace.domain.BitfinexTicker
-import blog.tsalikis.marketplace.marketplace.domain.ErrorCase
+import blog.tsalikis.marketplace.marketplace.domain.Ticker
+import blog.tsalikis.marketplace.marketplace.domain.TickerFormatter
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.math.BigDecimal
-import java.net.UnknownHostException
 
 class TickerRepositoryTest {
 
     private val bitfinexApi = mock<BitfinexApi>()
-    private val tickerRepository = TickerRepository(bitfinexApi)
+    private val tickerRepository = TickerRepository(bitfinexApi, TickerFormatter())
 
     private val btcUsd = listOf(
         "tBTCUSD",
@@ -95,26 +94,32 @@ class TickerRepositoryTest {
             assertThat(result).isEqualTo(
                 ContentError.Success(
                     listOf(
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "BTC",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("67956"),
                             dailyChangeRelative = BigDecimal("-0.00755042"),
                             iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                            formattedValue = "$67,956.00",
+                            formattedDailyChangeRelative = "-0.76%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "ETH",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2429.5"),
                             dailyChangeRelative = BigDecimal("-0.00832687"),
                             iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                            formattedValue = "$2,429.50",
+                            formattedDailyChangeRelative = "-0.83%",
                         ),
-                        BitfinexTicker(
+                        Ticker(
                             symbolFrom = "XAUT",
                             symbolTo = "USD",
                             lastPrice = BigDecimal("2742.2"),
                             dailyChangeRelative = BigDecimal("0.00029182"),
                             iconUrl = "https://static.coincap.io/assets/icons/xaut@2x.png",
+                            formattedValue = "$2,742.20",
+                            formattedDailyChangeRelative = "0.03%"
                         )
                     )
                 )
@@ -136,19 +141,23 @@ class TickerRepositoryTest {
         assertThat(result).isEqualTo(
             ContentError.Success(
                 listOf(
-                    BitfinexTicker(
+                    Ticker(
                         symbolFrom = "BTC",
                         symbolTo = "USD",
                         lastPrice = BigDecimal("67956"),
                         dailyChangeRelative = BigDecimal("-0.00755042"),
                         iconUrl = "https://static.coincap.io/assets/icons/btc@2x.png",
+                        formattedValue = "$67,956.00",
+                        formattedDailyChangeRelative = "-0.76%",
                     ),
-                    BitfinexTicker(
+                    Ticker(
                         symbolFrom = "ETH",
                         symbolTo = "USD",
                         lastPrice = BigDecimal("2429.5"),
                         dailyChangeRelative = BigDecimal("-0.00832687"),
                         iconUrl = "https://static.coincap.io/assets/icons/eth@2x.png",
+                        formattedValue = "$2,429.50",
+                        formattedDailyChangeRelative = "-0.83%",
                     ),
                 )
             )
